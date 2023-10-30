@@ -13,6 +13,8 @@ from model_summary import generate_answer, generate_video_summary
 load_dotenv()
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
+st.write("openai_api_key:", st.secrets["openai_api_key"])
+
 def valid_url(url: str) -> bool:
     try:
         yt = YouTube(url)
