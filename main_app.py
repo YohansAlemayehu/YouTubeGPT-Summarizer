@@ -190,7 +190,7 @@ def main():
 
     # os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
 
-    # openai_api_key = os.getenv('OPENAI_API_KEY')
+    openai_api_key = os.getenv('OPENAI_API_KEY')
 
     # Enter yourtube URL
     youtube_url = st.text_input("Enter YouTube Video URL")
