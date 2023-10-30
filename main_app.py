@@ -56,17 +56,17 @@ def main():
         st.error("Please enter a valid YouTube URL.")
 
     if choice == "Video Summary":
-        if st.button("Generate Summary"):
-            if not valid_url:
+        if st.button("Summary"):
+            if not youtube_url:
                 st.warning("Please enter a valid YouTube URL.")
             else:
                 with st.spinner("Generating summary..."):
                     summary = generate_video_summary(openai_api_key, youtube_url)
-                    st.markdown(f"##### Summary of the Video:")
-                    st.success(summary)
+                st.markdown(f"##### Summary of the Video:")
+                st.success(summary)
 
     elif choice == "Question-Answering":
-        if valid_url:
+        if youtube_url:
             st.markdown('##### Would you like to explore further details regarding this video?')
             question = st.text_input("Submit your questions here.")
         else:
@@ -74,7 +74,7 @@ def main():
             question = st.text_input("Submit your questions here.", disabled=True)
             
         if st.button("Answer"):
-            if not valid_url:
+            if not youtube_url:
                 st.warning("Please enter a valid YouTube URL.")
             elif not question:
                 st.warning("Please enter your question.")
