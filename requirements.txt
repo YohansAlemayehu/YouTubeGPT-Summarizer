@@ -3,3 +3,6 @@ langchain
 pytube
 streamlit
 moviepy
+dotenv
+urllib3
+pydub
