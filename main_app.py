@@ -12,7 +12,7 @@ import tempfile
 from model_summary import generate_answer, generate_video_summary
 
 # load_dotenv()
-openai_api_key = st.secrets.api_key.OPENAI_KEY
+openai_api_key = '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'
 
 # os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
 # openai_api_key = os.getenv['OPENAI_API_KEY']
