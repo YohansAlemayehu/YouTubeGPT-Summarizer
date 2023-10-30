@@ -18,7 +18,7 @@ st.write(
 	"Has environment variables been set:",
 	os.environ["OPENAI_API_KEY"] == st.secrets["OPENAI_API_KEY"])
 
-# openai_api_key = os.getenv('OPENAI_API_KEY')
+openai_api_key = 'api_key'
 
 
 def valid_url(url: str) -> bool:
