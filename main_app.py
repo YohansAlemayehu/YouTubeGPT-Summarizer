@@ -7,10 +7,11 @@ from moviepy.editor import *
 from pytube import YouTube
 import langchain as lc
 import tempfile
+import openai
 
 from model_summary import generate_answer, generate_video_summary
 
-# load_dotenv()
+load_dotenv()
 
 st.write("api_key", st.secrets["OPENAI_API_KEY"])
 
@@ -18,7 +19,7 @@ st.write(
 	"Has environment variables been set:",
 	os.environ["OPENAI_API_KEY"] == st.secrets["OPENAI_API_KEY"])
 
-openai_api_key = "OPENAI_API_KEY"
+openai.api_key = "OPENAI_API_KEY"
 
 
 def valid_url(url: str) -> bool:
