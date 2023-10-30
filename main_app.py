@@ -11,15 +11,20 @@ import openai
 
 from model_summary import generate_answer, generate_video_summary
 
-load_dotenv()
+# load_dotenv()
 
-st.write("api_key", st.secrets["OPENAI_API_KEY"])
+headers = {
+    "auhorization": st.secrets['OPENAI_API_KEY'],
+    "COntent-type": "Applicaion/json"
+}
 
-st.write(
-	"Has environment variables been set:",
-	os.environ["OPENAI_API_KEY"] == st.secrets["OPENAI_API_KEY"])
+# st.write("api_key", st.secrets["OPENAI_API_KEY"])
 
-openai_api_key = "OPENAI_API_KEY"
+# st.write(
+# 	"Has environment variables been set:",
+# 	os.environ["OPENAI_API_KEY"] == st.secrets["OPENAI_API_KEY"])
+
+# openai_api_key = "OPENAI_API_KEY"
 
 
 def valid_url(url: str) -> bool:
