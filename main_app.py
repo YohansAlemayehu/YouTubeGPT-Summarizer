@@ -188,9 +188,9 @@ def main():
     choice = st.radio("Go ahead and make your selection:", ('Video Summary', 'Question-Answering'), horizontal=True)
     st.markdown('#') 
 
-    # os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
+    os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
 
-    # openai_api_key = os.getenv('OPENAI_API_KEY')
+    openai_api_key = os.getenv('OPENAI_API_KEY')
 
     # Enter yourtube URL
     youtube_url = st.text_input("Enter YouTube Video URL")
@@ -211,7 +211,7 @@ def main():
                 st.warning("Please enter a valid YouTube URL.")
             else:
                 with st.spinner("Generating summary..."):
-                    summary = generate_video_summary(os.getenv["OPENAI_API_KEY"], youtube_url)
+                    summary = generate_video_summary(openai_api_key, youtube_url)
                     st.markdown(f"##### Summary of the Video:")
                     st.success(summary)
 
@@ -230,7 +230,7 @@ def main():
                 st.warning("Please enter your question.")
             else:
                 with st.spinner("Generating answer..."):
-                    answer = generate_answer(os.getenv["OPENAI_API_KEY"], youtube_url, question)
+                    answer = generate_answer(openai_api_key, youtube_url, question)
                 st.success(answer)
 
 if __name__ == "__main__":
