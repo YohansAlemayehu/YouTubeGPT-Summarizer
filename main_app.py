@@ -33,7 +33,7 @@ from langchain.llms import OpenAI
 
 headers = {
     "auhorization": st.secrets['OPENAI_API_KEY'],
-    "COntent-type": "Applicaion/json"
+    "Content-type": "Applicaion/json"
 }
 
 # st.write("api_key", st.secrets["OPENAI_API_KEY"])
@@ -42,7 +42,7 @@ headers = {
 # 	"Has environment variables been set:",
 # 	os.environ["OPENAI_API_KEY"] == st.secrets["OPENAI_API_KEY"])
 
-openai_api_key = os.getenv("OPENAI_API_KEY")
+# openai_api_key = os.getenv("OPENAI_API_KEY")
 
 
 def valid_url(url: str) -> bool:
@@ -106,7 +106,7 @@ def transcribe_audio(file_path, video_id):
 @st.cache_data(show_spinner=False)
 def generate_video_summary(api_key: str, url: str) -> str:
     openai.api_key = api_key
-    llm = OpenAI(temperature=0, openai_api_key=api_key, model_name="gpt-3.5-turbo")
+    llm = OpenAI(temperature=0, OPENAI_API_KEY=api_key, model_name="gpt-3.5-turbo")
     text_splitter = CharacterTextSplitter()
 
     # Extract the video_id from the URL
@@ -138,7 +138,7 @@ def generate_video_summary(api_key: str, url: str) -> str:
     return summary.strip()
 
 def generate_answer(api_key: str, url: str, question: str) -> str:
-    llm = OpenAI(temperature=0, openai_api_key=api_key, model_name="gpt-3.5-turbo")
+    llm = OpenAI(temperature=0, OPENAI_API_KEY=api_key, model_name="gpt-3.5-turbo")
     text_splitter = CharacterTextSplitter(chunk_size=512, chunk_overlap=25)
 
     # Extract the video_id from the url
@@ -200,8 +200,8 @@ def main():
         video_title = video_info(youtube_url)
         st.markdown(f"##### {video_title}")
         st.video(youtube_url)
-        os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
-        openai_api_key = os.getenv('OPENAI_API_KEY')
+        # os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
+        # openai_api_key = os.getenv('OPENAI_API_KEY')
     else:
         st.error("Please enter a valid YouTube URL.")
 
