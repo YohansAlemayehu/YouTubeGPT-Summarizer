@@ -7,6 +7,7 @@ from moviepy.editor import *
 from pytube import YouTube
 import langchain as lc
 import tempfile
+import openai
 
 
 from model_summary import generate_answer, generate_video_summary
@@ -15,7 +16,7 @@ from model_summary import generate_answer, generate_video_summary
 
 
 # os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
-# openai_api_key = os.getenv['OPENAI_API_KEY']
+openai.api_key = st.secrets['OPENAI_KEY']
 
 def valid_url(url: str) -> bool:
     try:
