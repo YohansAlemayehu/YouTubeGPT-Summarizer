@@ -4,3 +4,4 @@ pytube
 streamlit
 moviepy
 python-dotenv
+pydub
