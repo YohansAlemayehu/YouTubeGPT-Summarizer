@@ -18,8 +18,6 @@ from langchain.chains import RetrievalQA
 from langchain.llms import OpenAI
 
 load_dotenv()
-# os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
-
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
 
@@ -29,7 +27,7 @@ def download_audio(url: str):
     os.makedirs(tmp_dir, exist_ok=True)
     yt = YouTube(url)
 
-    # Extract the video_id from the URL
+#     # Extract the video_id from the URL
     query = urlparse(url).query
     params = parse_qs(query)
     video_id = params["v"][0]
