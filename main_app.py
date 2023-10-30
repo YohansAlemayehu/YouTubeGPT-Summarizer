@@ -12,9 +12,9 @@ import tempfile
 from model_summary import generate_answer, generate_video_summary
 
 # load_dotenv()
-openai_api_key = os.getenv('OPENAI_API_KEY')
+openai_api_key = st.secrets['secrets']['OPENAI_API_KEY']
 
-os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
+# os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
 # openai_api_key = os.getenv['OPENAI_API_KEY']
 
 def valid_url(url: str) -> bool:
@@ -36,16 +36,7 @@ def video_info(url: str):
 st.set_page_config(page_title="YouTubeGPT")
 
 #  main app UI
-def main():
-    with st.sidebar:
-        st.markdown("""<div style="text-align: justify;">Introducing YouTube Summarizer app powered by OpenAI, Langchain and Streamlit! 🚀
-        Now, watching videos becomes hassle-free. Simply paste the YouTube link, and voila!
-        Get instant, concise summaries of your favorite content and feel free to ask questions for more insight. Effortless, efficient, and tailored for you.
-        Enhancing your video experience to the next level!
-        </div>""", unsafe_allow_html=True)
-        st.markdown("#")
-        st.markdown("Source code [GitHub](https://github.com/YohansAlemayehu?tab=repositories)")
-        st.markdown("LinkedIn [Yohans Brhane](https://www.linkedin.com/in/yohans-brhane-46473063/)")
+def main():     
     st.header(":orange[YouTubeGPT Video Summarizer]")
     st.subheader(":orange[Discover video insights. Built with OpenAI & Langchain] 🚀")
     st.markdown('#') 

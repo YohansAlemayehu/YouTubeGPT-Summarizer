@@ -50,10 +50,10 @@ def transcribe_audio(file_path, video_id):
     
     # Get the size of the file in bytes and convert ot megabytes
     file_size = os.path.getsize(file_path)
-    file_size_in_mb = file_size / (1024 * 1024)
+    size_mb = file_size / (1024 * 1024)
 
     # Check if the file size is less than 20 MB
-    if file_size_in_mb < 20:
+    if size_mb < 20:
         with open(file_path, "rb") as audio_file:
             # Transcribe the audio using OpenAI API
             transcript_result = openai.Audio.transcribe("whisper-1", audio_file)
@@ -86,11 +86,7 @@ def generate_video_summary(api_key: str, url: str) -> str:
     if os.path.exists(transcript_filepath):
         with open(transcript_filepath) as f:
             transcript_file = f.read()
-        texts = text_splitter.split_text(transcript_file)
-        docs = [Document(page_content=t) for t in texts[:3]]
-        chain = load_summarize_chain(llm, chain_type="map_reduce")
-        summary = chain.run(docs)
-
+        
     else:
         download_audio(url)
         transcribe_audio(audio_path, video_id)
@@ -98,12 +94,10 @@ def generate_video_summary(api_key: str, url: str) -> str:
         with open(transcript_filepath) as f:
             transcript_file = f.read()
 
-        texts = text_splitter.split_text(transcript_file)
-        docs = [Document(page_content=t) for t in texts[:3]]
-        chain = load_summarize_chain(llm, chain_type="map_reduce")
-        summary = chain.run(docs)
-
-    
+    texts = text_splitter.split_text(transcript_file)
+    docs = [Document(page_content=t) for t in texts[:3]]
+    chain = load_summarize_chain(llm, chain_type="map_reduce")
+    summary = chain.run(docs)
 
     return summary.strip()
 
