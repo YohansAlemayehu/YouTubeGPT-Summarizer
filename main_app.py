@@ -10,7 +10,7 @@ import tempfile
 
 from model_summary import generate_answer, generate_video_summary
 
-load_dotenv()
+# load_dotenv()
 
 os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
 
