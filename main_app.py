@@ -31,8 +31,6 @@ def video_info(url: str):
     title = yt.title
     return title
 
-
-
 st.set_page_config(page_title="YouTubeGPT")
 
 #  main app UI
@@ -46,9 +44,8 @@ def main():
     # Enter yourtube URL
     youtube_url = st.text_input("Enter YouTube Video URL")
 
-    openai_api_key = st.secrets['api_key']['OPENAI_KEY']
+    openai_api_key = st.secrets.api_keys.OPENAI_KEY
 
-    
     if valid_url(youtube_url):
         video_title = video_info(youtube_url)
         st.markdown(f"##### {video_title}")
