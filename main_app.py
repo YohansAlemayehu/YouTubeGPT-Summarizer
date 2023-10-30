@@ -15,7 +15,7 @@ from model_summary import generate_answer, generate_video_summary
 # openai_api_key = os.getenv('OPENAI_API_KEY')
 
 os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
-openai_api_key = os.environ['OPENAI_API_KEY']
+openai_api_key = os.getenv['OPENAI_API_KEY']
 
 def valid_url(url: str) -> bool:
     try:
@@ -65,7 +65,7 @@ def main():
         st.error("Please enter a valid YouTube URL.")
 
     if choice == "Video Summary":
-        if st.button("Summary"):
+        if st.button("Generate Summary"):
             if not valid_url:
                 st.warning("Please enter a valid YouTube URL.")
             else:
