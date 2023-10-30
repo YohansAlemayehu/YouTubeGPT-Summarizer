@@ -13,7 +13,6 @@ from model_summary import generate_answer, generate_video_summary
 load_dotenv()
 openai_api_key = os.getenv('OPENAI_API_KEY')
 
-st.write("openai_api_key:", st.secrets["openai_api_key"])
 
 def valid_url(url: str) -> bool:
     try:
@@ -50,6 +49,8 @@ def main():
 
     # Enter yourtube URL
     youtube_url = st.text_input("Enter YouTube Video URL")
+
+    st.write("openai_api_key:", st.secrets["openai_api_key"])
 
     if valid_url(youtube_url):
         video_title = video_info(youtube_url)
