@@ -31,16 +31,16 @@ from langchain.llms import OpenAI
 
 # load_dotenv()
 
-headers = {
-    "auhorization": st.secrets['OPENAI_API_KEY'],
-    "Content-type": "Applicaion/json"
-}
+# headers = {
+#     "auhorization": st.secrets['OPENAI_API_KEY'],
+#     "Content-type": "Applicaion/json"
+# }
 
 # st.write("api_key", st.secrets["OPENAI_API_KEY"])
 
 # st.write(
 # 	"Has environment variables been set:",
-# 	os.environ["OPENAI_API_KEY"] == st.secrets["OPENAI_API_KEY"])
+os.environ["OPENAI_API_KEY"] == st.secrets["OPENAI_API_KEY"]
 
 # openai_api_key = os.getenv("OPENAI_API_KEY")
 
@@ -106,7 +106,7 @@ def transcribe_audio(file_path, video_id):
 @st.cache_data(show_spinner=False)
 def generate_video_summary(api_key: str, url: str) -> str:
     openai.api_key = api_key
-    llm = OpenAI(temperature=0, OPENAI_API_KEY=api_key, model_name="gpt-3.5-turbo")
+    llm = OpenAI(temperature=0, openai_api_key=os.getenv["OPENAI_API_KEY"], model_name="gpt-3.5-turbo")
     text_splitter = CharacterTextSplitter()
 
     # Extract the video_id from the URL
@@ -138,7 +138,7 @@ def generate_video_summary(api_key: str, url: str) -> str:
     return summary.strip()
 
 def generate_answer(api_key: str, url: str, question: str) -> str:
-    llm = OpenAI(temperature=0, OPENAI_API_KEY=api_key, model_name="gpt-3.5-turbo")
+    llm = OpenAI(temperature=0, openai_api_key=os.getenv["OPENAI_API_KEY"], model_name="gpt-3.5-turbo")
     text_splitter = CharacterTextSplitter(chunk_size=512, chunk_overlap=25)
 
     # Extract the video_id from the url
@@ -190,7 +190,7 @@ def main():
 
     # os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
 
-    openai_api_key = os.getenv('OPENAI_API_KEY')
+    # openai_api_key = os.getenv('OPENAI_API_KEY')
 
     # Enter yourtube URL
     youtube_url = st.text_input("Enter YouTube Video URL")
@@ -211,7 +211,7 @@ def main():
                 st.warning("Please enter a valid YouTube URL.")
             else:
                 with st.spinner("Generating summary..."):
-                    summary = generate_video_summary(openai_api_key, youtube_url)
+                    summary = generate_video_summary(os.getenv["OPENAI_API_KEY"], youtube_url)
                     st.markdown(f"##### Summary of the Video:")
                     st.success(summary)
 
@@ -230,7 +230,7 @@ def main():
                 st.warning("Please enter your question.")
             else:
                 with st.spinner("Generating answer..."):
-                    answer = generate_answer(openai_api_key, youtube_url, question)
+                    answer = generate_answer(os.getenv["OPENAI_API_KEY"], youtube_url, question)
                 st.success(answer)
 
 if __name__ == "__main__":
