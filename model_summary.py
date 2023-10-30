@@ -17,8 +17,8 @@ from langchain.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 from langchain.llms import OpenAI
 
-load_dotenv()
-openai_api_key = os.getenv('OPENAI_API_KEY')
+# load_dotenv()
+# openai_api_key = os.getenv('OPENAI_API_KEY')
 
 
 def download_audio(url: str):
@@ -52,8 +52,8 @@ def transcribe_audio(file_path, video_id):
     file_size = os.path.getsize(file_path)
     file_size_in_mb = file_size / (1024 * 1024)
 
-    # Check if the file size is less than 25 MB
-    if file_size_in_mb < 25:
+    # Check if the file size is less than 20 MB
+    if file_size_in_mb < 20:
         with open(file_path, "rb") as audio_file:
             # Transcribe the audio using OpenAI API
             transcript_result = openai.Audio.transcribe("whisper-1", audio_file)
@@ -65,7 +65,7 @@ def transcribe_audio(file_path, video_id):
         os.remove(file_path)
 
     else:
-        print("Size too large, please provide audio file with size <25 MB.")
+        print("Size too large, please provide audio file with size <20 MB.")
 
 @st.cache_data(show_spinner=False)
 def generate_video_summary(api_key: str, url: str) -> str:
@@ -102,6 +102,7 @@ def generate_video_summary(api_key: str, url: str) -> str:
     return summary.strip()
 
 def generate_answer(api_key: str, url: str, question: str) -> str:
+    openai.api_key = api_key
     llm = OpenAI(temperature=0, openai_api_key=api_key, model_name="gpt-3.5-turbo")
     text_splitter = CharacterTextSplitter(chunk_size=512, chunk_overlap=25)
 

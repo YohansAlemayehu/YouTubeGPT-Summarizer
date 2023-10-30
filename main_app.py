@@ -31,6 +31,8 @@ def video_info(url: str):
     title = yt.title
     return title
 
+
+
 st.set_page_config(page_title="YouTubeGPT")
 
 #  main app UI
