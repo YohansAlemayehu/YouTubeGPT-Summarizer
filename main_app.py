@@ -50,9 +50,9 @@ def main():
     choice = st.radio("Go ahead and make your selection:", ('Video Summary', 'Question-Answering'), horizontal=True)
     st.markdown('#') 
 
-    os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
+    # os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
 
-    openai_api_key = os.getenv('OPENAI_API_KEY')
+    # openai_api_key = os.getenv('OPENAI_API_KEY')
 
     # Enter yourtube URL
     youtube_url = st.text_input("Enter YouTube Video URL")
@@ -62,6 +62,8 @@ def main():
         video_title = video_info(youtube_url)
         st.markdown(f"##### {video_title}")
         st.video(youtube_url)
+        os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
+        openai_api_key = os.getenv('OPENAI_API_KEY')
     else:
         st.error("Please enter a valid YouTube URL.")
 
