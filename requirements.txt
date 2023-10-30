@@ -3,3 +3,4 @@ langchain
 pytube
 streamlit
 moviepy
+python-dotenv
