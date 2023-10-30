@@ -17,7 +17,7 @@ from langchain.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 from langchain.llms import OpenAI
 
-# load_dotenv()
+load_dotenv()
 os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
 
 openai_api_key = os.getenv('OPENAI_API_KEY')

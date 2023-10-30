@@ -10,7 +10,7 @@ import tempfile
 
 from model_summary import generate_answer, generate_video_summary
 
-# load_dotenv()
+load_dotenv()
 
 os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
 
@@ -49,6 +49,10 @@ def main():
     st.markdown('#') 
     choice = st.radio("Go ahead and make your selection:", ('Video Summary', 'Question-Answering'), horizontal=True)
     st.markdown('#') 
+
+    os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
+
+    openai_api_key = os.getenv('OPENAI_API_KEY')
 
     # Enter yourtube URL
     youtube_url = st.text_input("Enter YouTube Video URL")
