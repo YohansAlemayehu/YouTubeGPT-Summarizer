@@ -50,7 +50,7 @@ def main():
     # Enter yourtube URL
     youtube_url = st.text_input("Enter YouTube Video URL")
 
-    st.write("openai_api_key:", st.secrets["openai_api_key"])
+    
 
     if valid_url(youtube_url):
         video_title = video_info(youtube_url)
