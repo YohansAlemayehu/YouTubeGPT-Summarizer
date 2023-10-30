@@ -20,7 +20,7 @@ from langchain.llms import OpenAI
 # load_dotenv()
 os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
 
-openai_api_key = os.environ('OPENAI_API_KEY')
+openai_api_key = os.getenv('OPENAI_API_KEY')
 
 
 def download_audio(url: str):
