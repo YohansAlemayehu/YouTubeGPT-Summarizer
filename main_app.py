@@ -16,7 +16,7 @@ from model_summary import generate_answer, generate_video_summary
 
 
 # os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
-openai.api_key = st.secrets['OPENAI_KEY']
+openai_key = st.secrets['openai_key']
 
 def valid_url(url: str) -> bool:
     try:
@@ -45,8 +45,7 @@ def main():
     # Enter yourtube URL
     youtube_url = st.text_input("Enter YouTube Video URL")
 
-    openai_api_key = st.secrets['api_key']['OPENAI_KEY']
-
+    
     if valid_url(youtube_url):
         video_title = video_info(youtube_url)
         st.markdown(f"##### {video_title}")
@@ -61,7 +60,7 @@ def main():
                 st.warning("Please enter a valid YouTube URL.")
             else:
                 with st.spinner("Generating summary..."):
-                    summary = generate_video_summary(openai_api_key, youtube_url)
+                    summary = generate_video_summary(openai_key, youtube_url)
                 st.markdown(f"##### Summary of the Video:")
                 st.success(summary)
 
@@ -80,7 +79,7 @@ def main():
                 st.warning("Please enter your question.")
             else:
                 with st.spinner("Generating answer..."):
-                    answer = generate_answer(openai_api_key, youtube_url, question)
+                    answer = generate_answer(openai_key, youtube_url, question)
                 st.success(answer)
 
 if __name__ == "__main__":
