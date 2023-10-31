@@ -16,7 +16,7 @@ from model_summary import generate_answer, generate_video_summary
 
 
 # os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
-openai_api_key = st.secrets['openai_key']
+# openai_api_key = st.secrets['openai_key']
 
 def valid_url(url: str) -> bool:
     try:
@@ -42,7 +42,7 @@ def main():
     choice = st.radio("Go ahead and make your selection:", ('Video Summary', 'Question-Answering'), horizontal=True)
     st.markdown('#') 
 
-    # openai_key = st.secrets['openai_key']
+    openai_api_key = st.secrets['openai_key']
 
     # Enter yourtube URL
     youtube_url = st.text_input("Enter YouTube Video URL")
