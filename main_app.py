@@ -42,7 +42,7 @@ def main():
     choice = st.radio("Go ahead and make your selection:", ('Video Summary', 'Question-Answering'), horizontal=True)
     st.markdown('#') 
 
-    openai_key = st.secrets['openai_key']
+    # openai_key = st.secrets['openai_key']
 
     # Enter yourtube URL
     youtube_url = st.text_input("Enter YouTube Video URL")
