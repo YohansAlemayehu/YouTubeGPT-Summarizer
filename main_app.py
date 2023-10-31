@@ -12,11 +12,7 @@ import openai
 
 from model_summary import generate_answer, generate_video_summary
 
-# load_dotenv()
 
-
-# os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
-# openai_api_key = st.secrets['openai_key']
 
 def valid_url(url: str) -> bool:
     try:

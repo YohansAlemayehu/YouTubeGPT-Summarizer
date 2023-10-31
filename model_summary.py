@@ -113,12 +113,7 @@ def generate_answer(api_key: str, url: str, question: str) -> str:
     if os.path.exists(transcript_filepath):
         loader = TextLoader(transcript_filepath, encoding='utf8')
         documents = loader.load()
-        texts = text_splitter.split_documents(documents)
-        embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
-        db = Chroma.from_documents(texts, embeddings)
-        retriever = db.as_retriever()
-        qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
-        answer = qa.run(question)
+        
 
     else: 
         download_audio(url)
@@ -129,11 +124,11 @@ def generate_answer(api_key: str, url: str, question: str) -> str:
         loader = TextLoader(transcript_filepath, encoding='utf8')
         documents = loader.load()
 
-        texts = text_splitter.split_documents(documents)
-        embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
-        db = Chroma.from_documents(texts, embeddings)
-        retriever = db.as_retriever()
-        qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
-        answer = qa.run(question)
+    texts = text_splitter.split_documents(documents)
+    embeddings = OpenAIEmbeddings()
+    db = Chroma.from_documents(texts, embeddings)
+    retriever = db.as_retriever()
+    qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
+    answer = qa.run(question)
 
     return answer.strip()
