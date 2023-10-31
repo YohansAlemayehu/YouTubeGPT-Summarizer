@@ -5,5 +5,4 @@ pydub==0.25.1
 python-dotenv==1.0.0
 pytube==15.0.0
 streamlit==1.27.2
-python==3.11
 tiktoken
