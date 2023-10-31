@@ -64,7 +64,7 @@ def transcribe_audio(file_path, video_id):
     else:
         print("Size too large, please provide audio file with size <20 MB.")
 
-# @st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False)
 def generate_video_summary(api_key: str, url: str) -> str:
     openai.api_key = api_key
     llm = OpenAI(temperature=0, openai_api_key=api_key, model_name="gpt-3.5-turbo")
@@ -113,6 +113,13 @@ def generate_answer(api_key: str, url: str, question: str) -> str:
     if os.path.exists(transcript_filepath):
         loader = TextLoader(transcript_filepath, encoding='utf8')
         documents = loader.load()
+        texts = text_splitter.split_documents(documents)
+        embeddings = OpenAIEmbeddings()
+        db = Chroma.from_documents(texts, embeddings)
+        retriever = db.as_retriever()
+        qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
+        answer = qa.run(question)
+
     else: 
         download_audio(url)
         audio_path = f"tmp/{video_id}.mp3"
@@ -122,11 +129,11 @@ def generate_answer(api_key: str, url: str, question: str) -> str:
         loader = TextLoader(transcript_filepath, encoding='utf8')
         documents = loader.load()
 
-    texts = text_splitter.split_documents(documents)
-    embeddings = OpenAIEmbeddings()
-    db = Chroma.from_documents(texts, embeddings)
-    retriever = db.as_retriever()
-    qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
-    answer = qa.run(question)
+        texts = text_splitter.split_documents(documents)
+        embeddings = OpenAIEmbeddings()
+        db = Chroma.from_documents(texts, embeddings)
+        retriever = db.as_retriever()
+        qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
+        answer = qa.run(question)
 
     return answer.strip()
