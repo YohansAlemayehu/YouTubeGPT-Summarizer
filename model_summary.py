@@ -125,7 +125,7 @@ def generate_answer(api_key: str, url: str, question: str) -> str:
         documents = loader.load()
 
     texts = text_splitter.split_documents(documents)
-    embeddings = OpenAIEmbeddings(deploy_model="text-embedding-ada-002")
+    embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
     db = Chroma.from_documents(texts, embeddings)
     retriever = db.as_retriever()
     qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
