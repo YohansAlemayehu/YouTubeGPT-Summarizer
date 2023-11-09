@@ -67,7 +67,7 @@ def transcribe_audio(file_path, video_id):
 @st.cache_data(show_spinner=False)
 def generate_video_summary(api_key: str, url: str) -> str:
     openai.api_key = api_key
-    llm = OpenAI(temperature=0, openai_api_key=api_key, model_name="gpt-3.5-turbo")
+    llm = OpenAI(temperature=0, openai_api_key=api_key, model_name="gpt-3.5-turbo-16k")
     text_splitter = CharacterTextSplitter()
 
     # Extract the video_id from the URL
@@ -100,7 +100,7 @@ def generate_video_summary(api_key: str, url: str) -> str:
 
 def generate_answer(api_key: str, url: str, question: str) -> str:
     openai.api_key = api_key
-    llm = OpenAI(temperature=0, openai_api_key=api_key, model_name="gpt-3.5-turbo")
+    llm = OpenAI(temperature=0, openai_api_key=api_key, model_name="gpt-3.5-turbo-16k")
     text_splitter = CharacterTextSplitter(chunk_size=512, chunk_overlap=25)
 
     # Extract the video_id from the url
@@ -125,7 +125,7 @@ def generate_answer(api_key: str, url: str, question: str) -> str:
         documents = loader.load()
 
     texts = text_splitter.split_documents(documents)
-    embeddings = OpenAIEmbeddings(document_model_name="text-embedding-ada-002")
+    embeddings = OpenAIEmbeddings()
     db = Chroma.from_documents(texts, embeddings)
     retriever = db.as_retriever()
     qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
