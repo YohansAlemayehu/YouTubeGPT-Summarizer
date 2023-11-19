@@ -10,7 +10,7 @@ from pydub import *
 import tempfile
 from langchain.chains.summarize import load_summarize_chain
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings
+from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.document_loaders import TextLoader
 from langchain.docstore.document import Document
 from langchain.vectorstores import Chroma
