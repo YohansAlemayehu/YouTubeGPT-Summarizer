@@ -30,7 +30,7 @@ def video_info(url: str):
 
 st.set_page_config(page_title="YouTubeGPT")
 
-openai_api_key = st.secrets['openai_key']
+os.environ["OPENAI_API_KEY"] = st.secrets['openai_key']
 #  main app UI
 def main():     
     st.header(":orange[YouTubeGPT Video Summarizer]")
