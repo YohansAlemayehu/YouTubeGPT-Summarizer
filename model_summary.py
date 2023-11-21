@@ -49,14 +49,13 @@ def transcribe_audio(file_path, video_id):
     file_size = os.path.getsize(file_path)
     size_mb = file_size / (1024 * 1024)
 
-    # Check if the file size is less than 20 MB
-    if size_mb < 20:
+    # Check if the file size is less than 25 MB
+    if size_mb < 25:
         with open(file_path, "rb") as audio_file:
             # Transcribe the audio using OpenAI API
-            transcript_result = openai.Audio.transcribe("whisper-1", audio_file)
-            transcript_text = transcript_result["text"]
+            transcript = openai.Audio.translate(file=audio_file, model="whisper-large-v2", response-format="text", language="en")
             with open(transcript_filepath, "w") as transcript_file:
-                transcript_file.write(transcript_text)
+                transcript_file.write(transcript)
 
         # Delete the audio file
         os.remove(file_path)
