@@ -53,7 +53,7 @@ def transcribe_audio(file_path, video_id):
     if size_mb < 25:
         with open(file_path, "rb") as audio_file:
             # Transcribe the audio using OpenAI API
-            transcript = openai.Audio.translate(file=audio_file, model="whisper-2", response_format="text", language="en")
+            transcript = openai.Audio.translate(file=audio_file, model="large-v3", response_format="text", language="en")
             with open(transcript_filepath, "w") as transcript_file:
                 transcript_file.write(transcript)
 
