@@ -53,7 +53,7 @@ def transcribe_audio(file_path, video_id):
     if size_mb < 25:
         with open(file_path, "rb") as audio_file:
             # Transcribe the audio using OpenAI API
-            transcript = openai.Audio.translate(file=audio_file, model="whisper-large-v2", response_format="text", language="en")
+            transcript = openai.Audio.translate(file=audio_file, model="whisper-3", response_format="text", language="en")
             with open(transcript_filepath, "w") as transcript_file:
                 transcript_file.write(transcript)
 
@@ -91,7 +91,7 @@ def generate_video_summary(api_key: str, url: str) -> str:
             transcript_file = f.read()
 
     texts = text_splitter.split_text(transcript_file)
-    docs = [Document(page_content=t) for t in texts[:3]]
+    docs = [Document(page_content=t) for t in texts[:4]]
     chain = load_summarize_chain(llm, chain_type="map_reduce")
     summary = chain.run(docs)
 
@@ -100,7 +100,7 @@ def generate_video_summary(api_key: str, url: str) -> str:
 def generate_answer(api_key: str, url: str, question: str) -> str:
     openai.api_key = api_key
     llm = OpenAI(temperature=0, openai_api_key=api_key, model_name="gpt-3.5-turbo-16k")
-    text_splitter = CharacterTextSplitter(chunk_size=512, chunk_overlap=25)
+    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
 
     # Extract the video_id from the url
     query = urlparse(url).query
