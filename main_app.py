@@ -54,7 +54,7 @@ def main():
         st.error("Please enter a valid YouTube URL.")
 
     if choice == "Video Summary":
-        if st.button("Summary"):
+        if st.button("Summarize"):
             if not youtube_url:
                 st.warning("Please enter a valid YouTube URL.")
             else:
