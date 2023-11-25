@@ -91,7 +91,8 @@ def generate_video_summary(api_key: str, url: str) -> str:
             transcript_file = f.read()
 
     texts = text_splitter.split_text(transcript_file)
-    docs = [Document(page_content=t) for t in texts
+    docs = [Document(page_content=t) 
+            # for t in texts
     chain = load_summarize_chain(llm, chain_type="map_reduce")
     summary = chain.run(docs)
 
