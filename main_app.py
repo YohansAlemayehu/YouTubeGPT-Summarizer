@@ -8,14 +8,10 @@ from pytube import YouTube
 import langchain as lc
 import tempfile
 import openai
-from dotenv import load_dotenv
 
 
 from model_summary import generate_answer, generate_video_summary
 
-load_dotenv()
-
-openai_api_key = os.getenv('OPENAI_API_KEY')
 
 
 def valid_url(url: str) -> bool:
@@ -43,7 +39,7 @@ def main():
     choice = st.radio("Go ahead and make your selection:", ('Video Summary', 'Question-Answering'), horizontal=True)
     st.markdown('#') 
 
-    # openai_api_key = st.secrets['openai_key']
+    openai_api_key = st.secrets['openai_key']
 
     # Enter yourtube URL
     youtube_url = st.text_input("Enter YouTube Video URL")
