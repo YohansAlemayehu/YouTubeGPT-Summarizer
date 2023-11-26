@@ -66,7 +66,7 @@ def transcribe_audio(file_path, video_id):
 @st.cache_data(show_spinner=False)
 def generate_video_summary(api_key: str, url: str) -> str:
     openai.api_key = api_key
-    llm = OpenAI(temperature=0, openai_api_key=api_key, model_name="gpt-3.5-turbo-16k")
+    llm = OpenAI(temperature=0, openai_api_key=api_key, model_name="gpt-4-1106-preview")
     text_splitter = CharacterTextSplitter()
 
     # Extract the video_id from the URL
@@ -98,7 +98,7 @@ def generate_video_summary(api_key: str, url: str) -> str:
 
 def generate_answer(api_key: str, url: str, question: str) -> str:
     openai.api_key = api_key
-    llm = OpenAI(temperature=0, openai_api_key=api_key, model_name="gpt-3.5-turbo-16k")
+    llm = OpenAI(temperature=0, openai_api_key=api_key, model_name="gpt-4-1106-preview")
     text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
 
     # Extract the video_id from the url
