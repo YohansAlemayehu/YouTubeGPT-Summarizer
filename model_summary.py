@@ -54,6 +54,7 @@ def transcribe_audio(file_path, video_id):
     # file_size = os.path.getsize(file_path)
     # size_mb = file_size / (1024 * 1024)
 
+<<<<<<< HEAD
     # Check if the file size is less than 20 MB
     # if size_mb < 20:
     with open(file_path, "rb") as audio_file:
@@ -66,6 +67,15 @@ def transcribe_audio(file_path, video_id):
         transcript_text = transcript["text"]
         with open(transcript_filepath, "w") as transcript_file:
             transcript_file.write(transcript_text)
+=======
+    # Check if the file size is less than 25 MB
+    if size_mb < 25:
+        with open(file_path, "rb") as audio_file:
+            # Transcribe the audio using OpenAI API
+            transcript = openai.Audio.transcribe(file=audio_file, model="whisper-1", response_format="text", language="en")
+            with open(transcript_filepath, "w") as transcript_file:
+                transcript_file.write(transcript)
+>>>>>>> 580b8f0a365c5ed3da6842a7e1256dc4393c636b
 
     # Delete the audio file
     os.remove(file_path)
@@ -77,7 +87,11 @@ def transcribe_audio(file_path, video_id):
 @st.cache_data(show_spinner=False)
 def generate_video_summary(api_key, url):
     openai.api_key = api_key
+<<<<<<< HEAD
     llm = OpenAI(temperature=0.5, openai_api_key=api_key, model_name="gpt-3.5-turbo-1106")
+=======
+    llm = OpenAI(temperature=0, openai_api_key=api_key, model_name="gpt-3.5-turbo-16k")
+>>>>>>> 580b8f0a365c5ed3da6842a7e1256dc4393c636b
     text_splitter = CharacterTextSplitter()
 
     video_id = extract_video_id(url)
@@ -100,16 +114,27 @@ def generate_video_summary(api_key, url):
             transcript_file = f.read()
 
     texts = text_splitter.split_text(transcript_file)
+<<<<<<< HEAD
     documents = [Document(page_content=t) for t in texts[:3]]
     chain = load_summarize_chain(llm, chain_type="map_reduce")
     summary = chain.run(documents)
 
+=======
+    docs = [Document(page_content=t) for t in texts]    
+    chain = load_summarize_chain(llm, chain_type="map_reduce")
+    summary = chain.run(docs)
+>>>>>>> 580b8f0a365c5ed3da6842a7e1256dc4393c636b
     return summary.strip()
 
 def generate_answer(api_key, url, question):
     openai.api_key = api_key
+<<<<<<< HEAD
     llm = OpenAI(temperature=0.5, openai_api_key=api_key, model_name="gpt-3.5-turbo-1106")
     text_splitter = CharacterTextSplitter(chunk_size=512, chunk_overlap=25)
+=======
+    llm = OpenAI(temperature=0, openai_api_key=api_key, model_name="gpt-3.5-turbo-16k")
+    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+>>>>>>> 580b8f0a365c5ed3da6842a7e1256dc4393c636b
 
     video_id = extract_video_id(url)
     transcript_filepath = f"tmp/{video_id}.txt"
@@ -130,7 +155,7 @@ def generate_answer(api_key, url, question):
         documents = loader.load()
 
     texts = text_splitter.split_documents(documents)
-    embeddings = OpenAIEmbeddings()
+    embeddings = OpenAIEmbeddings(deployment="text-embedding-ada-002")
     db = Chroma.from_documents(texts, embeddings)
     retriever = db.as_retriever()
     qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
