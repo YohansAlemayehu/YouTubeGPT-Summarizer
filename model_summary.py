@@ -10,24 +10,29 @@ from pydub import *
 import tempfile
 from langchain.chains.summarize import load_summarize_chain
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings
+from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.document_loaders import TextLoader
 from langchain.docstore.document import Document
 from langchain.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 from langchain.llms import OpenAI
+import numpy as np
+import whisper
+import torch
+from whisper.audio import SAMPLE_RATE, load_audio, log_mel_spectrogram
 
+def extract_video_id(url):
+    video_id = url.split("v=")[1]
+    if "&" in video_id:
+        video_id = video_id.split("&")[0]
+    return video_id
 
-def download_audio(url: str):
+def download_youtube_audio(url):
     # Create the "tmp" directory if it doesn't exist
     tmp_dir = "tmp"
     os.makedirs(tmp_dir, exist_ok=True)
     yt = YouTube(url)
-
-    # Extract the video_id from the URL
-    query = urlparse(url).query
-    params = parse_qs(query)
-    video_id = params["v"][0]
+    video_id = extract_video_id(url)
 
     # Get the first available audio stream and download it
     audio_stream = yt.streams.filter(only_audio=True).first()
@@ -46,34 +51,37 @@ def transcribe_audio(file_path, video_id):
     transcript_filepath = f"tmp/{video_id}.txt"
     
     # Get the size of the file in bytes and convert ot megabytes
-    file_size = os.path.getsize(file_path)
-    size_mb = file_size / (1024 * 1024)
+    # file_size = os.path.getsize(file_path)
+    # size_mb = file_size / (1024 * 1024)
 
     # Check if the file size is less than 20 MB
-    if size_mb < 20:
-        with open(file_path, "rb") as audio_file:
-            # Transcribe the audio using OpenAI API
-            transcript_result = openai.Audio.transcribe("whisper-1", audio_file)
-            transcript_text = transcript_result["text"]
-            with open(transcript_filepath, "w") as transcript_file:
-                transcript_file.write(transcript_text)
+    # if size_mb < 20:
+    with open(file_path, "rb") as audio_file:
+        # Transcribe the audio using OpenAI API
+        # model = whisper.load_model("large-v3")
+        transcript = openai.Audio.transcribe("whisper-1", audio_file)
+        # model = whisper.load_model("base")
+        # client = OpenAI()
+        # result = client.audio.transcriptions.create(model="whisper-large-v3", file=audio_file, response_format="text") 
+        transcript_text = transcript["text"]
+        with open(transcript_filepath, "w") as transcript_file:
+            transcript_file.write(transcript_text)
 
-        # Delete the audio file
-        os.remove(file_path)
+    # Delete the audio file
+    os.remove(file_path)
 
-    else:
-        print("Size too large, please provide audio file with size <20 MB.")
+    # else:
+    #     print("Size too large, please provide audio file with size <20 MB.")
+  
 
 @st.cache_data(show_spinner=False)
-def generate_video_summary(api_key: str, url: str) -> str:
+def generate_video_summary(api_key, url):
     openai.api_key = api_key
-    llm = OpenAI(temperature=0, openai_api_key=api_key, model_name="gpt-3.5-turbo")
+    llm = OpenAI(temperature=0.5, openai_api_key=api_key, model_name="gpt-3.5-turbo-1106")
     text_splitter = CharacterTextSplitter()
 
-    # Extract the video_id from the URL
-    query_info = urlparse(url).query
-    params_info = parse_qs(query_info)
-    video_id = params_info["v"][0]
+    video_id = extract_video_id(url)
+
 
     # The path of the audio file and transcript
     audio_path = f"tmp/{video_id}.mp3"
@@ -85,28 +93,25 @@ def generate_video_summary(api_key: str, url: str) -> str:
             transcript_file = f.read()
         
     else:
-        download_audio(url)
+        download_youtube_audio(url)
         transcribe_audio(audio_path, video_id)
 
         with open(transcript_filepath) as f:
             transcript_file = f.read()
 
     texts = text_splitter.split_text(transcript_file)
-    docs = [Document(page_content=t) for t in texts[:3]]
+    documents = [Document(page_content=t) for t in texts[:3]]
     chain = load_summarize_chain(llm, chain_type="map_reduce")
-    summary = chain.run(docs)
+    summary = chain.run(documents)
 
     return summary.strip()
 
-def generate_answer(api_key: str, url: str, question: str) -> str:
+def generate_answer(api_key, url, question):
     openai.api_key = api_key
-    llm = OpenAI(temperature=0, openai_api_key=api_key, model_name="gpt-3.5-turbo")
+    llm = OpenAI(temperature=0.5, openai_api_key=api_key, model_name="gpt-3.5-turbo-1106")
     text_splitter = CharacterTextSplitter(chunk_size=512, chunk_overlap=25)
 
-    # Extract the video_id from the url
-    query = urlparse(url).query
-    params = parse_qs(query)
-    video_id = params["v"][0]
+    video_id = extract_video_id(url)
     transcript_filepath = f"tmp/{video_id}.txt"
 
     # Check if the transcript file already exists
@@ -116,7 +121,7 @@ def generate_answer(api_key: str, url: str, question: str) -> str:
         
 
     else: 
-        download_audio(url)
+        download_youtube_audio(url)
         audio_path = f"tmp/{video_id}.mp3"
         
         # Transcribe the mp3 audio to text and Generating summary
