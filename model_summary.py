@@ -50,18 +50,18 @@ def transcribe_audio(file_path, video_id):
     size_mb = file_size / (1024 * 1024)
 
     # Check if the file size is less than 25 MB
-    if size_mb < 25:
-        with open(file_path, "rb") as audio_file:
-            # Transcribe the audio using OpenAI API
-            transcript = openai.Audio.transcribe(file=audio_file, model="whisper-1", response_format="text", language="en")
-            with open(transcript_filepath, "w") as transcript_file:
-                transcript_file.write(transcript)
+    # if size_mb < 25:
+    with open(file_path, "rb") as audio_file:
+        # Transcribe the audio using OpenAI API
+        transcript = openai.Audio.transcribe(file=audio_file, model="whisper-1", response_format="text", language="en")
+        with open(transcript_filepath, "w") as transcript_file:
+            transcript_file.write(transcript)
 
-        # Delete the audio file
-        os.remove(file_path)
+    # Delete the audio file
+    os.remove(file_path)
 
-    else:
-        print("Size too large, please provide audio file with size <20 MB.")
+    # else:
+    #     print("Size too large, please provide audio file with size <20 MB.")
 
 @st.cache_data(show_spinner=False)
 def generate_video_summary(api_key: str, url: str) -> str:
